@@ -1,0 +1,123 @@
+# Visual Studio Code
+.vscode/
+
+# Visual Studio
+.vscode/
+*.code-workspace
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific files (Mono auto generated)
+mono_crash.*
+
+# User-specific files (Windows only)
+*.VC.db
+*.VC.VC.opendb
+
+# User-specific files (Windows only)
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# VS Code directories
+.vscode/
+.vscode/*
+
+# Visual Studio directories
+.vs/
+.vs/*
+
+# Build Results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# MSTest test Results
+[Tt]est[Rr]esult*/ 
+[Bb]uild[Ll]og.*
+TestResults
+
+# NUNIT
+*.VisualState.xml
+TestResult.xml
+
+# build scripts
+project.lock.json
+project.fragment.lock.json
+project.nuget.cache
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# StyleCop
+StyleCopTest
+
+# Files built by Visual Studio
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# Chutzpah Test files
+_Chutzpah*
+
+# Doc Project and HTML help generated
+docproject.xml
+*.docstates
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+lerna-debug.log
+
+# TypeScript v1 declaration files
+typings/
+
+# Visual Studio 6 build log
+*.plg
+
+# JetBrains Rider
+.idea/
+.idea/*
