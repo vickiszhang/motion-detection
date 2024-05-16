@@ -4,6 +4,7 @@
 # Visual Studio
 .vscode/
 *.code-workspace
+*.vcxproj*
 
 # User-specific files
 *.rsuser
