@@ -7,14 +7,10 @@
 using namespace std;
 using namespace cv;
 
-/*
-* void main() {
-	string path = "me.jpg";
-	Mat img = imread(path);
-	imshow("Frame", img);
-	waitKey(0);
-}
-*/
+
+Mat img, flipped_img;
+
+vector<vector<int>> newPoints;
 
 vector<vector<int>> myColors {
 	 {0, 135, 123, 16, 254, 255}, //orange
@@ -31,7 +27,47 @@ vector<Scalar> myColorsBGR {
 	{ 0, 255, 0 },
 };
 
-void findColor(Mat img) {
+Point getContours(Mat image) {
+
+
+	vector<vector<Point>> contours;
+	vector<Vec4i> hierarchy;
+
+	Point myPoint(0, 0);
+
+	findContours(image, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+
+	vector<vector<Point>> conPoly(contours.size());
+	vector<Rect> boundRect(contours.size());
+
+	for (int i = 0; i < contours.size(); i++)
+	{
+		int area = contourArea(contours[i]);
+		cout << area << endl;
+
+
+		string objectType;
+
+		if (area > 1000)
+		{
+			float peri = arcLength(contours[i], true);
+			approxPolyDP(contours[i], conPoly[i], 0.02 * peri, true);
+
+			cout << conPoly[i].size() << endl;
+			boundRect[i] = boundingRect(conPoly[i]);
+
+			myPoint.x = boundRect[i].x + boundRect[i].width / 2;
+			myPoint.y = boundRect[i].y;
+
+			/*drawContours(flipped_img, conPoly, i, Scalar(255, 0, 255), 2);
+			rectangle(flipped_img, boundRect[i].tl(), boundRect[i].br(), Scalar(0, 255, 0), 5);*/
+		}
+	}
+	return myPoint;
+}
+
+
+vector<vector<int>> findColor(Mat img) {
 	Mat imgHSV;
 	cvtColor(img, imgHSV, COLOR_BGR2HSV);
 
@@ -40,15 +76,27 @@ void findColor(Mat img) {
 		Scalar upper(myColors[i][3], myColors[i][4], myColors[i][5]);
 		Mat mask;
 		inRange(imgHSV, lower, upper, mask);
-		imshow(to_string(i), mask);
+		//imshow(to_string(i), mask);
+		Point currPoint = getContours(mask);
+
+		if (currPoint.x != 0 && currPoint.y != 0) {
+			newPoints.push_back({ currPoint.x, currPoint.y, i });
+
+		}
 	}
+	return newPoints;
 
 }
 
+void drawPoints(vector<vector<int>> newPoints) {
+	for (int i = 0; i < newPoints.size(); i++) {
+		circle(flipped_img, Point(newPoints[i][0],newPoints[i][1]), 10, myColorsBGR[newPoints[i][2]], FILLED);
+	}
+}
+
 void main() {
-	VideoCapture video(0); // replace 0 with video path
+	VideoCapture video(0);
 	CascadeClassifier facedetect;
-	Mat img, flipped_img;
 	facedetect.load("haarcascade_frontalface_default.xml");
 
 
@@ -56,20 +104,22 @@ void main() {
 		video.read(img);
 		flip(img, flipped_img, 1);
 
+		// face detection
 
-		vector<Rect> faces;
+		//vector<Rect> faces;
 
-		facedetect.detectMultiScale(flipped_img, faces, 1.3, 5);
+		//facedetect.detectMultiScale(flipped_img, faces, 1.3, 5);
 
-		cout << faces.size() << endl;
+		//cout << faces.size() << endl;
 
-		for (int i = 0; i < faces.size(); i++) {
-			rectangle(flipped_img, faces[i].tl(), faces[i].br(), Scalar(50, 50, 255), 3);
-			rectangle(flipped_img, Point(0, 0), Point(250, 70), Scalar(50, 50, 255), FILLED);
-			putText(flipped_img, to_string(faces.size()) + " Faces Found", Point(10, 40), FONT_HERSHEY_DUPLEX, 1, Scalar(255, 255, 255));
-		}
+		//for (int i = 0; i < faces.size(); i++) {
+		//	rectangle(flipped_img, faces[i].tl(), faces[i].br(), Scalar(50, 50, 255), 3);
+		//	rectangle(flipped_img, Point(0, 0), Point(250, 70), Scalar(50, 50, 255), FILLED);
+		//	putText(flipped_img, to_string(faces.size()) + " Faces Found", Point(10, 40), FONT_HERSHEY_DUPLEX, 1, Scalar(255, 255, 255));
+		//}
 
-		findColor(flipped_img);
+		newPoints = findColor(flipped_img);
+		drawPoints(newPoints);
 
 		imshow("Frame", flipped_img);
 		waitKey(1);
